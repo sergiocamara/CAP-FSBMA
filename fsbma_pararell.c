@@ -99,7 +99,7 @@ int main(void)
     start = omp_get_wtime(); 
 
     /* Inicializar los costes mínimos asociados a cada bloque */
-    #pragma omp parallel for collapse(1) shared (costes) 
+    #pragma omp parallel for collapse(2) shared (costes) 
     for (unsigned int y = 0; y < HEIGHT / BS; y++)
     {
         for (unsigned int x = 0; x < WIDTH / BS; x++)
@@ -110,9 +110,10 @@ int main(void)
 
     // clock_gettime(CLOCK_PROCESS_CPUTIME_ID,&inicio);
     /* Los datos ahora sí que están preparados. Procedemos a calcular los costes */
-    // #pragma omp parallel for collapse(2) private(x,y,costes)
+    // #pragma omp parallel for collapse(2) 
     // #pragma omp parallel for collapse(1)
     // #pragma omp parallel for collapse(2)
+    #pragma omp parallel for collapse(4) shared (Vx,Vy,costes) 
     for (unsigned int y = 0; y < HEIGHT; y += BS)
     {
         for (unsigned int x = 0; x < WIDTH; x += BS)
@@ -156,7 +157,7 @@ int main(void)
     }
 
     // printf("Tiempo transcurrido: %ld.%ld segundos.\n", fin.tv_sec-inicio.tv_sec,(fin.tv_nsec-inicio.tv_nsec)%(int)(1e+9));
-    printf("Work took %f seconds\n", end - start);
+    printf("%f seconds\n", end - start);
 
     fclose(fref);
     fclose(fact);
