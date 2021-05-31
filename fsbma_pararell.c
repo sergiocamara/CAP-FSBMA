@@ -110,9 +110,7 @@ int main(void)
 
     // clock_gettime(CLOCK_PROCESS_CPUTIME_ID,&inicio);
     /* Los datos ahora sí que están preparados. Procedemos a calcular los costes */
-    // #pragma omp parallel for collapse(2) 
-    // #pragma omp parallel for collapse(1)
-    // #pragma omp parallel for collapse(2)
+
     #pragma omp parallel for collapse(4) shared (Vx,Vy,costes) 
     for (unsigned int y = 0; y < HEIGHT; y += BS)
     {
@@ -120,7 +118,6 @@ int main(void)
         {
             /* Calcular MSE para todos los bloques en el área de búsqueda. 
            Las coordenadas en ref y act están alineadas.   */
-        //    #pragma omp parallel for collapse(2) shared (Vx,Vy,costes) private(x,y)
             for (unsigned char j = 0; j < 2 * SA; j++)
             {
                 for (unsigned char k = 0; k < 2 * SA; k++)
@@ -170,6 +167,8 @@ int main(void)
 float MSE(unsigned char *bloque_actual, unsigned char *bloque_referencia)
 {
     float error = 0;
+    // #pragma omp parallel for collapse(2) reduction(+:error)
+    // es mas lento.
     for (unsigned char y = 0; y < BS; y++)
     {
         for (unsigned char x = 0; x < BS; x++)
