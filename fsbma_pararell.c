@@ -133,6 +133,7 @@ int main(void)
                         Vy[y / BS][x / BS] = k - SA;
                     }
                     
+                    
                 }
             }
         }
@@ -171,6 +172,7 @@ float MSE(unsigned char *bloque_actual, unsigned char *bloque_referencia)
     // es mas lento.
     for (unsigned char y = 0; y < BS; y++)
     {
+        // #pragma omp parallel for reduction(+:error) private(y)
         for (unsigned char x = 0; x < BS; x++)
         {
 
