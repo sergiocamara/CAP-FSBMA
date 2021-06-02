@@ -168,11 +168,12 @@ int main(void)
 float MSE(unsigned char *bloque_actual, unsigned char *bloque_referencia)
 {
     float error = 0;
-    // #pragma omp parallel for collapse(2) reduction(+:error)
+    // #pragma omp parallel for collapse(2) reduction(+:error) 
     // es mas lento.
     for (unsigned char y = 0; y < BS; y++)
-    {
-        // #pragma omp parallel for reduction(+:error) private(y)
+    {   
+        // #pragma omp parallel for collapse(2) reduction(+:error)
+     
         for (unsigned char x = 0; x < BS; x++)
         {
 
